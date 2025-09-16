@@ -70,5 +70,4 @@ public class ProductController {
         }
         return ResponseEntity.notFound().build();
     }
-
 }

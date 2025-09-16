@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "categories")
+//@Table(name = "categories")
 public class Category {
 
     @Id
@@ -25,7 +25,7 @@ public class Category {
 
     @NotBlank(message = "Name is required")
     @Size(min = 2,max = 255, message = "Name must be between 2 and 255 characters")
-    @Column(nullable = false,unique = true,length = 255, name = "category_name")
+    @Column(nullable = false,unique = true,length = 255)
     private String name;
 
     @ManyToMany(mappedBy = "categories")

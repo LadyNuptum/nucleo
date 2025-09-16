@@ -23,7 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "products")
+//@Table(name = "products")
 public class Product {
 
     @Id

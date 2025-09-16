@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "images")
+//@Table(name = "images")
 public class ProductImage {
 
     @Id
