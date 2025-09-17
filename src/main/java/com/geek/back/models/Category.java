@@ -1,5 +1,5 @@
 package com.geek.back.models;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,13 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-//@Table(name = "categories")
 public class Category {
 
     @Id
@@ -29,11 +27,7 @@ public class Category {
     private String name;
 
     @ManyToMany(mappedBy = "categories")
-    @JsonBackReference
-//    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     private Set<Product> products = new HashSet<>();
-
-
-
 
 }
