@@ -2,6 +2,7 @@ package com.geek.back.services;
 
 import com.geek.back.models.Category;
 import com.geek.back.repositories.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +11,12 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
-    private CategoryRepository categoryRepository;
+    final private CategoryRepository categoryRepository;
+
+    @Autowired
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public List<Category> findAll() {
@@ -33,7 +39,6 @@ public class CategoryServiceImpl implements CategoryService{
             categoryRepository.deleteById(id);
             return c;
         });
-
     }
 
     public Category findByIdOrThrow(Long id){

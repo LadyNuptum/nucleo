@@ -1,6 +1,5 @@
 package com.geek.back.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -16,14 +15,12 @@ import java.util.Set;
 
 
 @Entity
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-//@Table(name = "products")
 public class Product {
 
     @Id
@@ -66,13 +63,9 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    @JsonManagedReference
-//    @JsonIgnore
-//    @EqualsAndHashCode.Exclude
     private Set<Category> categories  =new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    @EqualsAndHashCode.Exclude
     @JsonManagedReference
     private Set<ProductImage> images = new HashSet<>();
 
