@@ -43,12 +43,13 @@ public class ProductServiceImpl implements ProductService{
 
     @Transactional
     @Override
-    public Optional <Product> deleteById(Long id){
-        return productRepository.findById(id).map(p ->{
+    public Optional<Product> deleteById(Long id) {
+        return productRepository.findById(id).map(p -> {
             productRepository.deleteById(id);
             return p;
         });
     }
+
 
     @Transactional
     @Override
@@ -56,17 +57,16 @@ public class ProductServiceImpl implements ProductService{
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        // Evitar duplicados
         boolean exist = product.getImages().stream()
                 .anyMatch(img -> img.getUrl().equals(image.getUrl()));
 
         if (!exist) {
             product.addImage(image);
         }
-
-        // Guardamos la entidad principal, Hibernate maneja el cascade
         return productRepository.save(product);
     }
+
+
 
     @Transactional
     @Override
@@ -77,11 +77,14 @@ public class ProductServiceImpl implements ProductService{
         ProductImage image = productImageRepository.findById(imageId)
                 .orElseThrow(() -> new EntityNotFoundException("Image not found"));
 
-        // Usamos el método de la entidad
         product.removeImage(image);
-
-        // Guardamos la entidad principal
         return productRepository.save(product);
+    }
+
+
+    @Override
+    public List<Product> findByCategoryName(String categoryName) {
+        return productRepository.findByCategories_NameIgnoreCase(categoryName);
     }
 
 }
