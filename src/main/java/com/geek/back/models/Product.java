@@ -1,6 +1,5 @@
 package com.geek.back.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -11,19 +10,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
 @Entity
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "products")
 public class Product {
 
     @Id
@@ -32,7 +31,7 @@ public class Product {
     private Long id;
 
     @NotBlank(message = "Name is required")
-    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     @Column(nullable = false)
     private String name;
 
@@ -66,15 +65,16 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    @JsonManagedReference
-//    @JsonIgnore
-//    @EqualsAndHashCode.Exclude
     private Set<Category> categories  =new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    @EqualsAndHashCode.Exclude
     @JsonManagedReference
     private Set<ProductImage> images = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<CartItem> detalles = new ArrayList<>();
 
     public void addImage(ProductImage image){
         images.add(image);

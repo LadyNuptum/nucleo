@@ -1,4 +1,5 @@
 package com.geek.back.models;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -9,25 +10,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+//@Table(name = "roles")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank(message = "Name is required")
-    @Size(min = 2,max = 255, message = "Name must be between 2 and 255 characters")
-    @Column(nullable = false,unique = true,length = 255)
+    @NotBlank(message = "name is required")
+    @Size(min = 2, max = 100, message = "Role name must be between 2 and 100 characters")
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private Set<Product> products = new HashSet<>();
-
+//    @JsonBackReference
+    @EqualsAndHashCode.Exclude
+    private Set<User> users = new HashSet<>();
 }

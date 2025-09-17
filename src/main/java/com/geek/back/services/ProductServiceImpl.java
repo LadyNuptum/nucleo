@@ -1,7 +1,10 @@
 package com.geek.back.services;
 
 import com.geek.back.models.Product;
+import com.geek.back.models.ProductImage;
+import com.geek.back.repositories.ProductImageRepository;
 import com.geek.back.repositories.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +16,11 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService{
 
     final private ProductRepository productRepository;
+    final private ProductImageRepository productImageRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductImageRepository productImageRepository) {
         this.productRepository = productRepository;
+        this.productImageRepository = productImageRepository;
     }
 
     @Transactional(readOnly = true)
@@ -36,17 +41,6 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.save(product);
     }
 
-//    @Transactional
-//    @Override
-//    public Optional<Product> deleteById(Long id) {
-//        Optional<Product> optionalProduct = productRepository.findById(id);
-//        if (optionalProduct.isPresent()){
-//            productRepository.deleteById(id);
-//            return optionalProduct;
-//        }
-//        return Optional.empty();
-//    }
-
     @Transactional
     @Override
     public Optional <Product> deleteById(Long id){
@@ -54,6 +48,40 @@ public class ProductServiceImpl implements ProductService{
             productRepository.deleteById(id);
             return p;
         });
+    }
+
+    @Transactional
+    @Override
+    public Product addImageToProduct(Long productId, ProductImage image) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        // Evitar duplicados
+        boolean exist = product.getImages().stream()
+                .anyMatch(img -> img.getUrl().equals(image.getUrl()));
+
+        if (!exist) {
+            product.addImage(image);
+        }
+
+        // Guardamos la entidad principal, Hibernate maneja el cascade
+        return productRepository.save(product);
+    }
+
+    @Transactional
+    @Override
+    public Product removeImageFromProduct(Long productId, Long imageId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        ProductImage image = productImageRepository.findById(imageId)
+                .orElseThrow(() -> new EntityNotFoundException("Image not found"));
+
+        // Usamos el método de la entidad
+        product.removeImage(image);
+
+        // Guardamos la entidad principal
+        return productRepository.save(product);
     }
 
 }
