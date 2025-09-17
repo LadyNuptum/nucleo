@@ -1,6 +1,6 @@
 package com.geek.back.services;
 
-import com.geek.back.models.Rol;
+import com.geek.back.models.Role;
 import com.geek.back.repositories.RolRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,37 +10,37 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class RolServiceImpl implements RolService {
+public class RoleServiceImpl implements RoleService {
 
     private final RolRepository rolRepository;
 
-    public RolServiceImpl(RolRepository rolRepository) {
+    public RoleServiceImpl(RolRepository rolRepository) {
         this.rolRepository = rolRepository;
     }
 
     @Override
-    public List<Rol> findAll() {
+    public List<Role> findAll() {
         return rolRepository.findAll();
     }
 
     @Override
-    public Optional<Rol> findById(Long id) {
+    public Optional<Role> findById(Long id) {
         return rolRepository.findById(id);
     }
 
     @Override
-    public Rol save(Rol rol) {
-        return rolRepository.save(rol);
+    public Role save(Role role) {
+        return rolRepository.save(role);
     }
 
     @Override
-    public Optional<Rol> deleteById(Long id) {
+    public Optional<Role> deleteById(Long id) {
         return rolRepository.findById(id).map(r -> { rolRepository.deleteById(id); return r; });
     }
 
     @Override
-    public Rol findByNombreOrCreate(String nombre) {
-        return rolRepository.findByNombre(nombre)
-                .orElseGet(() -> rolRepository.save(Rol.builder().nombre(nombre).build()));
+    public Role findByNombreOrCreate(String name) {
+        return rolRepository.findByName(name)
+                .orElseGet(() -> rolRepository.save(Role.builder().name(name).build()));
     }
 }

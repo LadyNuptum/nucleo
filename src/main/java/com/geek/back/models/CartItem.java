@@ -1,17 +1,18 @@
 package com.geek.back.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "carrito_detalles")
+//@Table(name = "carrito_detalles")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class CarritoDetalle {
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +20,17 @@ public class CarritoDetalle {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "carrito_id", nullable = false)
-    private Carrito carrito;
+    @JoinColumn(name = "shoppingCart_id", nullable = false)
+    @JsonBackReference
+    private ShoppingCart shoppingCart;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "producto_id", nullable = false)
-    private Product producto;
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @Column(nullable = false)
-    private Integer cantidad;
+    private Integer quantity;
 
     @Column(nullable = false)
-    private Double precioUnitario;
+    private Double UnitPrice;
 }
