@@ -36,7 +36,7 @@ public class User {
 
     @NotBlank(message = "Lastname is required")
     @Size(min = 2, max = 100, message = "Lastname must be between 2 and 100 characters")
-    @Column(nullable = false)
+    @Column(nullable = false, name = "lastname")
     private String lastName;
 
 
