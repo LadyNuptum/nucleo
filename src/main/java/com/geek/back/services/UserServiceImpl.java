@@ -40,24 +40,10 @@ public class UserServiceImpl implements UserService {
         Set<Role> resolved = new HashSet<>();
         if (user.getRoles() != null && !user.getRoles().isEmpty()) {
             for (Role r : user.getRoles()) {
-//                if (r.getId() != null) {
-//                    roleRepository.findById(r.getId()).ifPresent(resolved::add);
-//                } else if (r.getName() != null) {
-//                    Role role = roleRepository.findByName(r.getName())
-//                            .orElseGet(() -> roleRepository.save(Role.builder().name(r.getName()).build()));
-//                    resolved.add(role);
-//                }
-                // Solo permitimos roles ya existentes en la BD
                 roleRepository.findByName(r.getName())
                         .ifPresent(resolved::add);
             }
         }
-//        else {
-//            Role defaultRole = roleRepository.findByName("ROLE_USER")
-//                    .orElseGet(() -> roleRepository.save(Role.builder().name("ROLE_USER").build()));
-//            resolved.add(defaultRole);
-//        }
-        // Si no trae roles → asignamos USER por defecto
         if (resolved.isEmpty()) {
             Role defaultRole = roleRepository.findByName("ROLE_USER")
                     .orElseThrow(() -> new RuntimeException("Default role ROLE_USER not found in DB"));
